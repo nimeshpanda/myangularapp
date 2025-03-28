@@ -8,15 +8,15 @@ pipeline {
             }
         }
       stage('SonarQube analysis') {
-      steps {
-        script {
-            scannerHome = tool '<sonarqubeScannerInstallation>'// must match the name of an actual scanner installation directory on your Jenkins build agent
-        }
-        withSonarQubeEnv('<sonarqubeInstallation>') {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
-          sh "${scannerHome}/bin/sonar-scanner"
-        }
-      }
+  steps {
+    script {
+      scannerHome = tool 'SonarScanner' // Must match the name configured in Global Tool Configuration
     }
+    withSonarQubeEnv('SonarQube') { // Must match the name of your SonarQube server in Configure System
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
+}
         stage('Deliver') {
             steps {
                 sh 'chmod -R +rwx ./jenkins/scripts/deliver.sh'
